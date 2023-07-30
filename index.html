@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="">
+    <meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0," />
+	<title>Apollo 24|7</title>
+	
+	<meta property="og:title" content="Apollo 24|7" />
+	<meta property="og:description" content="Share this with your friends and family." />
+	<meta property="og:image" itemprop="image" content="" />
+	<meta property="og:image:width" content="300">
+	<meta property="og:image:height" content="250">
+	<meta property="og:url" content="https://www.apollo247.com">
+	
+
+    <meta name="msapplication-TileColor" content="#02475b" />
+    <meta name="theme-color" content="#fff" />
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="css/style.css">
+	
+	<script async="true" src="assets/js/main.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css"/>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+</head>
+
+
+<body>
+<header class="w-100">
+	<div class="container">
+		<div  class="logo text-center">
+			<a href="https://www.apollo247.com/" class="" ><img src="https://htmltest.blob.core.windows.net/test/apollo-247/Logo_5.png" alt="Logo" width="100px" class="img-fluid"></a>
+		</div>
+	</div>
+</header>
+
+
+<section class="py-4">
+	<div class="container">
+			<div class="form-group">
+				<input type="text" class="form-control" id="input_pin" placeholder="Enter Pin Code" />
+			</div>
+			<button class="btn bg-org form-control">Locate</button>
+		
+			<div id="searching" class="px-1 pt-4" style="display: none;">
+				<p class="d-flex align-items-center"> 
+					<span class="mr-2"><img src="map.svg" class="img-fluid"></span> Search Result for Pin Code <span id="pin-code" class="pl-2"></span>
+				</p>
+				<div id="loader" class="loader">Loading...</div>
+			</div>
+
+		   <div id="result" class="px-1 mt-4"></div>
+			
+	</div>
+</section>
+
+
+    <script>
+
+
+        $('button').on('click', function () {
+					
+            $('#result').html("")
+            $('#searching').show()
+            let store_pin = $('#input_pin').val()
+            let found = false;
+			document.getElementById("pin-code").innerHTML = store_pin;
+			
+            $.getJSON("https://script.googleusercontent.com/macros/echo?user_content_key=9SBYwLsGHh905sJWWzoU3nsi6gQKrj-SSsS4uKow9cmf6c6miLftG7TJglO5flQ-DOODaIOpgrXlvmenjCBO4QyRM0ziTRQnm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnL7-M_6a4PveBOHcS4JwzDqJgDGVCjuUOJy8j8YdHrbnHwCFSNm6KvK_7z5KaN0gO3HD9fuf7KSRY83b8ZbW5O5_FcW2wixdAg&lib=MCih0EynNJYEXBU9bzNICBSGtssg7ayfU", function (data) {
+                console.log(data.data)
+                for (let i = 0; i < data.data.length; i++) {
+
+                    if (data.data[i].Pincode == store_pin) {
+                        console.log("Found")
+                        found = true;
+						$('#loader').hide();
+
+                        for (let j = 0; j < data.data[i].Stores.length; j++) {
+                            console.log(data.data[i].Stores[j].storeName)
+                            $('#result').append("<b>"+data.data[i].Stores[j].storeName + "</b>"+ "<br>"+data.data[i].Stores[j].storeAddress + "<br>"+data.data[i].Stores[j].storePhoneno + "<br><hr>"  )
+                        }
+                        
+                          
+                    }
+                
+                    
+                }
+                if (!found) {
+                $('#result').html("not found")
+                   }
+                $('#searching').hide()
+             
+              
+               
+            })
+
+        })
+
+
+
+    </script>
+
+
+</body>
+
+</html>
